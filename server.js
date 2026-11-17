@@ -8,7 +8,7 @@ const fs = require('fs');
 const db = require('./config/database');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3003;
 
 // aaPanel / Nginx reverse proxy support
 app.set('trust proxy', true);

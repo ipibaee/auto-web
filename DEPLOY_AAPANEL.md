@@ -67,12 +67,12 @@ Ada 2 cara mudah di aaPanel:
    - **Name**: `auto-web`
    - **Run Opt**: `npm`
    - **Run script**: `start` (atau pilih file: `server.js`)
-   - **Port**: `3000`
+   - **Port**: `3003`
    - **Node version**: Pilih versi Node.js yang sudah diinstall (misal v20 atau v22)
    - **Run as**: `www`
    - **Domain binding**: Masukkan nama domain utama Anda (misal `linkku.com` atau `web.domainanda.com`)
    - **Remark**: Auto Web Gateway
-5. Klik **Submit**. aaPanel akan otomatis mengatur service background (PM2) dan membuat konfigurasi Nginx Reverse Proxy ke port 3000!
+5. Klik **Submit**. aaPanel akan otomatis mengatur service background (PM2) dan membuat konfigurasi Nginx Reverse Proxy ke port 3003!
 
 ---
 

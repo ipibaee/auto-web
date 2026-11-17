@@ -49,8 +49,8 @@ npm install
 npm start
 ```
 
-- **Link Utama (Pengunjung):** `http://localhost:3000/`
-- **Panel Admin:** `http://localhost:3000/admin`
+- **Link Utama (Pengunjung):** `http://localhost:3003/`
+- **Panel Admin:** `http://localhost:3003/admin`
 - **Akun Default:**
   - Username: `admin`
   - Password: `admin123`
