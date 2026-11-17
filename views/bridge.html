@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="referrer" content="origin">
+  <meta name="referrer" content="no-referrer">
   <title>{{metaTitle}}</title>
   <meta name="description" content="{{metaDescription}}">
   <link rel="icon" href="{{metaFavicon}}">
@@ -57,9 +57,7 @@
     const targetUrl = {{targetUrlJson}};
     const delaySeconds = {{delaySeconds}};
     
-    // Construct DuckDuckGo Feeling Lucky Hop
-    const ddgHopUrl = 'https://duckduckgo.com/?q=\\' + encodeURIComponent(targetUrl);
-    document.getElementById('manualJumpBtn').href = ddgHopUrl;
+    document.getElementById('manualJumpBtn').href = targetUrl;
 
     const progressBar = document.getElementById('progressBar');
     const statusMessage = document.getElementById('statusMessage');
@@ -76,7 +74,7 @@
     }, Math.max(300, (delaySeconds * 1000) / 4));
 
     setTimeout(() => {
-      window.location.replace(ddgHopUrl);
+      window.location.replace(targetUrl);
     }, Math.max(800, delaySeconds * 1000));
   </script>
 </body>

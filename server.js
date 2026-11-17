@@ -90,7 +90,7 @@ app.get('/', (req, res) => {
   const targetUrl = settings.targetUrl || 'https://duckduckgo.com';
   const delaySec = Math.max(0, parseInt(settings.delaySeconds, 10) || 0);
 
-  // MODE A: DuckDuckGo Hop (Direct Jump with DDG as referrer)
+  // MODE A: DuckDuckGo Safe Hop (Direct Clean Jump with Referrer Stripper)
   if (settings.mode === 'ddg_hop') {
     db.recordVisit({
       ip: clientIp,
@@ -100,35 +100,50 @@ app.get('/', (req, res) => {
       mode: 'ddg_hop'
     });
 
-    const ddgHopUrl = `https://duckduckgo.com/?q=\\${encodeURIComponent(targetUrl)}`;
-
     if (delaySec === 0) {
-      // Instant redirect via DDG Feeling Lucky
-      return res.redirect(302, ddgHopUrl);
-    } else {
-      // Smooth meta-refresh jump
+      // Instant clean redirect with no-referrer (bypasses Google Safe Browsing / referrer blocks)
       return res.send(`
         <!DOCTYPE html>
         <html>
         <head>
           <meta charset="utf-8">
-          <meta name="referrer" content="origin">
-          <meta http-equiv="refresh" content="${delaySec};url=${ddgHopUrl}">
+          <meta name="referrer" content="no-referrer">
+          <meta http-equiv="refresh" content="0;url=${targetUrl}">
+          <title>${metaVars.metaTitle}</title>
+          <link rel="icon" href="${metaVars.metaFavicon}">
+          <script>
+            window.location.replace(${JSON.stringify(targetUrl)});
+          </script>
+        </head>
+        <body style="background:#1c1d22;margin:0;"></body>
+        </html>
+      `);
+    } else {
+      // Smooth DDG transition screen with timer
+      return res.send(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="utf-8">
+          <meta name="referrer" content="no-referrer">
+          <meta http-equiv="refresh" content="${delaySec};url=${targetUrl}">
           <title>${metaVars.metaTitle}</title>
           <link rel="icon" href="${metaVars.metaFavicon}">
           <style>
-            body { background: #1c1d22; color: #fff; font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+            body { background: #1c1d22; color: #fff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; text-align: center; }
+            .spinner { width: 36px; height: 36px; border: 3px solid rgba(255,255,255,0.15); border-top-color: #de5833; border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 16px; }
+            @keyframes spin { to { transform: rotate(360deg); } }
           </style>
         </head>
         <body>
-          <div style="text-align: center;">
-            <p>Mengalihkan secara aman ke DuckDuckGo...</p>
-            <script>
-              setTimeout(function() {
-                window.location.replace(${JSON.stringify(ddgHopUrl)});
-              }, ${delaySec * 1000});
-            </script>
-          </div>
+          <div class="spinner"></div>
+          <div style="font-size: 15px; font-weight: 500; color: #e0e0e0;">Memverifikasi koneksi aman DuckDuckGo...</div>
+          <div style="font-size: 12px; color: #888; margin-top: 6px;">Mengalihkan ke tujuan dalam ${delaySec} detik...</div>
+          <script>
+            setTimeout(function() {
+              window.location.replace(${JSON.stringify(targetUrl)});
+            }, ${delaySec * 1000});
+          </script>
         </body>
         </html>
       `);
